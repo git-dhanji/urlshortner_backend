@@ -1,25 +1,49 @@
 import {
   createShortUrlService,
+  createShortUrlWithUserService,
   getUrlByShortIdService,
 } from "../services/shorturl.services.js";
 import { AppError } from "../utils/errorHandler.utils.js";
 
 export const createShortUrl = async (req, res) => {
-  const { url } = req.body;
-  if (!url) {
+  let shortUrl;
+  const data = req.body;
+  const user = req.user;
+  if (!data) {
     throw new AppError("URL is required", 400);
   }
-  const shortUrl = await createShortUrlService(url);
-
-  res.send(process.env.APP_URI + shortUrl).json({
+  if (user) {
+    shortUrl = await createShortUrlWithUserService(data.url,user._id,data.slug);
+  } else {
+    shortUrl = await createShortUrlService(data.url);
+  }
+  const fullUrl = `${process.env.APP_URI + shortUrl}`;
+  res.status(201).json({
     message: "short url created successfully",
+    fullUrl: fullUrl,
+  });
+};
+
+
+
+export const createCustomShortUrl = async (req, res) => {
+  const { url, slug } = req.body;
+  if (!url || !slug) {
+    throw new AppError("URL and slug are required", 400);
+  }
+  const shortUrl = await createShortUrlService(url, slug);
+  const fullUrl = `${process.env.APP_URI + shortUrl}`;
+
+  res.status(201).send(fullUrl).json({
+    message: "custom short url created successfully",
+    shortUrl: fullUrl,
   });
 };
 
 export const redirectFromShortUrl = async (req, res) => {
   const { id } = req.params;
   const url = await getUrlByShortIdService(id);
-  //add validate url for redirect and check malicious or not 
+  //add validate url for redirect and check malicious or not
   if (url) {
     res.redirect(url);
   } else {

@@ -1,11 +1,21 @@
 import { Router } from "express";
-import { loginUser, registerUser } from "../controllers/auth.controllers.js";
+import {
+  loginUser,
+  logoutUser,
+  registerUser,
+} from "../controllers/auth.controllers.js";
 import { catchAsync } from "../utils/errorHandler.utils.js";
 import { authMiddleware } from "../middleware/auth.middleware.js";
 
 const router = Router();
 
-router.post('/login', authMiddleware, catchAsync(loginUser));
-router.post('/register', catchAsync(registerUser));
+router.post("/login", catchAsync(loginUser));
+router.post("/register", catchAsync(registerUser));
+router.get("/me", authMiddleware, async (req, res) => {
+  res.status(200).json({
+    user: req.user,
+  });
+});
+router.get("/logout", logoutUser);
 
 export default router;

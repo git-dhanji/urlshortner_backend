@@ -7,13 +7,19 @@ import { globalErrorHandler } from "./src/utils/errorHandler.utils.js";
 import { redirectFromShortUrl } from "./src/controllers/shorturl.controllers.js";
 import cors from "cors";
 import cookieParser from "cookie-parser";
+import { authMiddleware } from "./src/middleware/auth.middleware.js";
 
 configDotenv();
 const port = process.env.PORT || 4000;
 
 const app = express();
 
-app.use(cors());
+app.use(
+  cors({
+    origin: "http://localhost:5173", // Adjust this to your frontend URL
+    credentials: true, // Allow cookies to be sent with requests
+  })
+);
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -26,10 +32,9 @@ app.get("/", (req, res) => {
 });
 
 
+
 app.use("/api/create", shorturlRouter);
 app.use("/api/auth", authRouter);
-
-
 
 //Get short URL
 app.use("/:id", redirectFromShortUrl);

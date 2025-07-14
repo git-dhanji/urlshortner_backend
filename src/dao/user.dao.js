@@ -4,6 +4,10 @@ export const findUserByEmail = async (email) => {
   const user = await User.findOne({ email });
   return user;
 };
+export const findUserByEmailAndPassword = async (email) => {
+  const user = await User.findOne({ email }).select("+password");
+  return user;
+};
 
 export const saveUser = async (username,email,password) => {
   const user = await User.create({ username,email,password });

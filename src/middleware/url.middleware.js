@@ -1,10 +1,10 @@
 import { findUserById } from "../dao/user.dao.js";
 import { verifyToken } from "../utils/helper.utils.js";
 
-export const authMiddleware = async (req, res, next) => {
+export const urlMiddleware = async (req, res, next) => {
   const token = req.cookies.accessToken;
   if (!token) {
-    return res.status(401).json({ message: "Unauthorized access" });
+    return next();
   }
 
   try {
@@ -16,8 +16,7 @@ export const authMiddleware = async (req, res, next) => {
 
     const user = await findUserById(decoded.id);
     if (!user) throw new Error("user not find");
-    req.user = user; // Attach user info to request object
-   
+    req.user = user;
     next();
   } catch (error) {
     return res.status(403).json({ message: "Invalid token" });

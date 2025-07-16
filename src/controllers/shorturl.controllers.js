@@ -7,13 +7,20 @@ import { AppError } from "../utils/errorHandler.utils.js";
 
 export const createShortUrl = async (req, res) => {
   let shortUrl;
+
   const data = req.body;
   const user = req.user;
+  console.log(data);
   if (!data) {
     throw new AppError("URL is required", 400);
   }
+
   if (user) {
-    shortUrl = await createShortUrlWithUserService(data.url,user._id,data.slug);
+    shortUrl = await createShortUrlWithUserService(
+      data.url,
+      user._id,
+      data.slug
+    );
   } else {
     shortUrl = await createShortUrlService(data.url);
   }
@@ -23,8 +30,6 @@ export const createShortUrl = async (req, res) => {
     fullUrl: fullUrl,
   });
 };
-
-
 
 export const createCustomShortUrl = async (req, res) => {
   const { url, slug } = req.body;
@@ -41,12 +46,16 @@ export const createCustomShortUrl = async (req, res) => {
 };
 
 export const redirectFromShortUrl = async (req, res) => {
-  const { id } = req.params;
-  const url = await getUrlByShortIdService(id);
-  //add validate url for redirect and check malicious or not
-  if (url) {
-    res.redirect(url);
-  } else {
-    throw new AppError("URL not found", 404);
+  try {
+    const { id } = req.params;
+    const url = await getUrlByShortIdService(id);
+
+    if (url) {
+      return res.redirect(url);
+    } else {
+      throw new AppError("URL not found", 404);
+    }
+  } catch (err) {
+    next(err); // let your global error handler deal with it
   }
 };

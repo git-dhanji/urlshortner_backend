@@ -5,9 +5,9 @@ import shorturlRouter from "./src/routes/shorturl.routes.js";
 import authRouter from "./src/routes/auth.routes.js";
 import { globalErrorHandler } from "./src/utils/errorHandler.utils.js";
 import { redirectFromShortUrl } from "./src/controllers/shorturl.controllers.js";
+import userUrls from "./src/routes/user.routes.js";
 import cors from "cors";
 import cookieParser from "cookie-parser";
-import { authMiddleware } from "./src/middleware/auth.middleware.js";
 
 configDotenv();
 const port = process.env.PORT || 4000;
@@ -28,12 +28,11 @@ app.use(cookieParser());
 //Get
 
 app.get("/", (req, res) => {
-  res.json({ message: "Welcome to the URL Shortener API" });
+  res.send("<h1>Welcome to the URL Shortener API</h1>");
 });
 
-
-
 app.use("/api/create", shorturlRouter);
+app.use("/api/urls", userUrls);
 app.use("/api/auth", authRouter);
 
 //Get short URL

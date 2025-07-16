@@ -4,6 +4,7 @@ export const saveShortUrl = async (shortUrl, originalUrl, userId) => {
   const newUrl = new shortUrlSchema({
     short_url: shortUrl,
     full_url: originalUrl,
+    redirect_url: `${process.env.APP_URI}${shortUrl}`,
   });
 
   if (userId) {
@@ -16,4 +17,6 @@ export const getCustomShortUrl = async (slug) => {
   return shortUrlSchema.findOne({ short_url: slug });
 };
 
-
+export const getUserUrl = async (id) => {
+  return shortUrlSchema.find({ user: id });
+};

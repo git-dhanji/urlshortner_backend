@@ -3,6 +3,7 @@ import { getCustomShortUrl, saveShortUrl } from "../dao/shorturl.dao.js";
 import shortUrlSchema from "../models/shorturl.models.js";
 
 export const createShortUrlService = async (url) => {
+  
   const shortId = generateNanoId(6);
   await saveShortUrl(shortId, url);
   return shortId;
@@ -25,7 +26,11 @@ export const createShortUrlWithUserService = async (
 export const getUrlByShortIdService = async (shortId) => {
   const url = await shortUrlSchema.findOneAndUpdate(
     { short_url: shortId },
-    { $inc: { clicks: 1 } }
+    { $inc: { clicks: 1 } },
+    { new: true }
   );
+  if(!url){
+    throw new Error("URL not found");
+  }
   return url.full_url;
 };

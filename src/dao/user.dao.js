@@ -9,9 +9,9 @@ export const findUserByEmailAndPassword = async (email) => {
   return user;
 };
 
-export const saveUser = async (username,email,password) => {
-  const user = await User.create({ username,email,password });
-  if(!user) {
+export const saveUser = async (username, email, password) => {
+  const user = await User.create({ username, email, password });
+  if (!user) {
     throw new Error("User creation failed at saveUserDao fn");
   }
   await user.save();
@@ -22,5 +22,4 @@ export const findUserById = async (id) => {
   const user = await User.findById(id);
   return user;
 };
-
 

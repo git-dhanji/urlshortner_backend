@@ -10,7 +10,6 @@ export const createShortUrl = async (req, res) => {
 
   const data = req.body;
   const user = req.user;
-  console.log(data);
   if (!data) {
     throw new AppError("URL is required", 400);
   }

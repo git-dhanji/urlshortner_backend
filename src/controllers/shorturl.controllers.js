@@ -25,7 +25,7 @@ export const createShortUrl = async (req, res) => {
   }
   const fullUrl = `${process.env.APP_URI + shortUrl}`;
   res.status(201).json({
-    message: "short url created successfully",
+    message: "short url created successfully!",
     fullUrl: fullUrl,
   });
 };
@@ -43,6 +43,7 @@ export const createCustomShortUrl = async (req, res) => {
     shortUrl: fullUrl,
   });
 };
+
 
 export const redirectFromShortUrl = async (req, res) => {
   try {

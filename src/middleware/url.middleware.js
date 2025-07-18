@@ -11,7 +11,7 @@ export const urlMiddleware = async (req, res, next) => {
     const decoded = await verifyToken(token);
 
     if (!decoded) {
-      return res.status(403).json({ message: "Invalid token" });
+      return next();
     }
 
     const user = await findUserById(decoded.id);
@@ -19,6 +19,7 @@ export const urlMiddleware = async (req, res, next) => {
     req.user = user;
     next();
   } catch (error) {
-    return res.status(403).json({ message: "Invalid token" });
+    console.log('create your link as guest')
   }
+  next(); // Always continue
 };

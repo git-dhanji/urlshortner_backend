@@ -3,9 +3,10 @@ import mongoose from "mongoose";
 const analyticsSchema = new mongoose.Schema({
     // Reference to the shortened URL
     shortUrl: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Url",
-        required: true,
+        // type: mongoose.Schema.Types.ObjectId,
+        type: String
+        // ref: "Url",
+        // required: true,
     },
 
     // When the click happened
@@ -62,6 +63,7 @@ const analyticsSchema = new mongoose.Schema({
     // Device fingerprint (optional, for tracking fraud/multiple clicks)
     fingerprint: {
         type: String,
+        default: "unknown",
     },
 
     // Click Quality (e.g., real, suspicious, spam)

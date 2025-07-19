@@ -3,10 +3,7 @@ import mongoose from "mongoose";
 const analyticsSchema = new mongoose.Schema({
     // Reference to the shortened URL
     shortUrl: {
-        // type: mongoose.Schema.Types.ObjectId,
         type: String,
-        // ref: "Url",
-        required: true,
     },
 
     // When the click happened

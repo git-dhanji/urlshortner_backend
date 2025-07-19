@@ -9,6 +9,7 @@ import userUrls from "./src/routes/user.routes.js";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import trackClick from "./src/controllers/analytics.controllers.js";
+import analyticsRouter from "./src/routes/analytics.routes.js";
 
 configDotenv();
 const port = process.env.PORT || 4000;
@@ -35,6 +36,7 @@ app.get("/", (req, res) => {
 app.use("/api/create", shorturlRouter);
 app.use("/api/urls", userUrls);
 app.use("/api/auth", authRouter);
+app.use("/api", analyticsRouter);
 
 //Get short URL
 // app.use("/:id",  redirectFromShortUrl);

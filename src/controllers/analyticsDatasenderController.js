@@ -16,6 +16,8 @@ export const getAnalyticsDataByShortId = WrapAsync(async (req, res) => {
         if (!urlData) {
             return res.status(404).json({ message: "Short URL not found" });
         }
+
+
         const analytics = await Analytics.aggregate([
             { $match: { shortUrl: shortId } },
             {
@@ -78,7 +80,8 @@ export const getAnalyticsDataByShortId = WrapAsync(async (req, res) => {
         // 3. Build response
         const response = {
             url: {
-                shortUrl: `https://quicklink.com/${shortId}`,
+                shortUrl: `${process.env.APP_URI}${shortId}`,
+                shortId: shortId,
                 originalUrl: urlData.original_url,
                 totalClicks: result.totalClicks[0]?.count || 0,
                 createdAt: urlData.createdAt

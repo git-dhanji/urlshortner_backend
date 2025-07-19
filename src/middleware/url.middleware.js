@@ -19,7 +19,7 @@ export const urlMiddleware = async (req, res, next) => {
     req.user = user;
     next();
   } catch (error) {
-    console.log('create your link as guest')
+    console.log('create your link as guest');
+    next(); // Continue as guest user
   }
-  next(); // Always continue
 };

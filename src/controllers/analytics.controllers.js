@@ -6,7 +6,12 @@ import geoip from "geoip-lite";
 const trackClick = WrapAsync(async (req, res, next) => {
     try {
         const { id } = req.params;
-        const shortUrlId = id;
+
+        // Skip tracking for favicon, robots.txt, and other system files
+        if (id === 'favicon.ico' || id === 'robots.txt' || id.includes('.')) {
+            return next();
+        }
+
         const ip = req.headers["x-forwarded-for"] || req.socket.remoteAddress;
         //apply for testing ip 
         const realIp = (ip === "::1" || ip === "127.0.0.1") ? "8.8.8.8" : ip;
@@ -44,15 +49,15 @@ const trackClick = WrapAsync(async (req, res, next) => {
 
 
         const analyticsEntry = new Analytics({
-            shortUrl: shortUrlId,
+            shortUrl: id,
             ipAddress: ip,
             location: {
                 country: geo.country || "Unknown",
                 city: geo.city || "Unknown",
                 region: geo.region || "Unknown",
                 timezone: geo.timezone || "Unknown",
-                latitude: geo.ll?.[0] || "Unknown",
-                longitude: geo.ll?.[1] || "Unknown",
+                latitude: geo.ll?.[0] || 0,
+                longitude: geo.ll?.[1] || 0,
                 isp: geo.org || "Unknown",
             },
             deviceInfo,
@@ -64,8 +69,7 @@ const trackClick = WrapAsync(async (req, res, next) => {
             connection,
         });
         await analyticsEntry.save();
-
-        console.log(analyticsEntry)
+        console.log(`Analytics tracked for: ${id}, ${analyticsEntry}`);
         next(); // continue to actual redirect
 
     } catch (error) {

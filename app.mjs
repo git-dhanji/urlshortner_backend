@@ -17,7 +17,7 @@ const app = express();
 
 app.use(
   cors({
-    origin: "http://localhost:5174", // Adjust this to your frontend URL
+    origin: "http://localhost:5173", // Adjust this to your frontend URL
     credentials: true, // Allow cookies to be sent with requests
   })
 );
@@ -37,6 +37,7 @@ app.use("/api/urls", userUrls);
 app.use("/api/auth", authRouter);
 
 //Get short URL
+// app.use("/:id",  redirectFromShortUrl);
 app.use("/:id", trackClick, redirectFromShortUrl);
 
 app.use(globalErrorHandler);

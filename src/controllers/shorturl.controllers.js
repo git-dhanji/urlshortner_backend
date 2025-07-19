@@ -1,16 +1,19 @@
+
 import {
   createShortUrlService,
   createShortUrlWithUserService,
   getUrlByShortIdService,
 } from "../services/shorturl.services.js";
 import { AppError } from "../utils/errorHandler.utils.js";
+import { makeRedirectableUrl } from "../utils/helper.utils.js";
 
 export const createShortUrl = async (req, res) => {
   let shortUrl;
 
   const data = req.body;
   const user = req.user;
-  if (!data) {
+
+  if (!data || !data.url) {
     throw new AppError("URL is required", 400);
   }
 
@@ -23,35 +26,50 @@ export const createShortUrl = async (req, res) => {
   } else {
     shortUrl = await createShortUrlService(data.url);
   }
-  const fullUrl = `${process.env.APP_URI + shortUrl}`;
+
+  const fullUrl = `${process.env.APP_URI}${shortUrl}`;
   res.status(201).json({
     message: "short url created successfully!",
     fullUrl: fullUrl,
   });
 };
 
+
+
+
 export const createCustomShortUrl = async (req, res) => {
   const { url, slug } = req.body;
+  const user = req.user;
+
   if (!url || !slug) {
     throw new AppError("URL and slug are required", 400);
   }
-  const shortUrl = await createShortUrlService(url, slug);
-  const fullUrl = `${process.env.APP_URI + shortUrl}`;
 
-  res.status(201).send(fullUrl).json({
+  // Use the user service if user is authenticated, otherwise create without user
+  let shortUrl;
+  if (user) {
+    shortUrl = await createShortUrlWithUserService(url, user._id, slug);
+  } else {
+    // For custom URLs without user, we need a different approach
+    // Since createShortUrlService doesn't accept slug, we'll use the user service with null userId
+    shortUrl = await createShortUrlWithUserService(url, null, slug);
+  }
+
+  const fullUrl = `${process.env.APP_URI}${shortUrl}`;
+  res.status(201).json({
     message: "custom short url created successfully",
     shortUrl: fullUrl,
   });
 };
 
 
-export const redirectFromShortUrl = async (req, res) => {
+export const redirectFromShortUrl = async (req, res, next) => {
   try {
     const { id } = req.params;
     const url = await getUrlByShortIdService(id);
-
-    if (url) {
-      return res.redirect(url);
+    const validUrl = await makeRedirectableUrl(url)
+    if (validUrl) {
+      return res.redirect(validUrl);
     } else {
       throw new AppError("URL not found", 404);
     }

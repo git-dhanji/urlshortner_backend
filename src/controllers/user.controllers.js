@@ -7,8 +7,8 @@ export const userAllUrls = WrapAsync(async (req, res) => {
     throw new Error("User not available");
   }
   const urls = await getUserUrl(user._id);
-  res.status(201).json({
-    message: "all urls find",
-    user: urls,
+  res.status(200).json({
+    message: "all urls found",
+    urls: urls,
   });
 });

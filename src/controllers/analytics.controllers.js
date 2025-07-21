@@ -69,7 +69,6 @@ const trackClick = WrapAsync(async (req, res, next) => {
             connection,
         });
         await analyticsEntry.save();
-        console.log(`Analytics tracked for: ${id}, ${analyticsEntry}`);
         next(); // continue to actual redirect
 
     } catch (error) {

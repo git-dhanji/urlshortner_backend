@@ -12,6 +12,7 @@ import trackClick from "./src/controllers/analytics.controllers.js";
 import analyticsRouter from "./src/routes/analytics.routes.js";
 import contactRouter from "./src/routes/contact.routes.js";
 
+import trackData from './src/routes/trackData.routes.js'
 configDotenv();
 const port = process.env.PORT || 4000;
 
@@ -43,6 +44,7 @@ app.use("/api/contact", contactRouter);
 //Get short URL
 // app.use("/:id",  redirectFromShortUrl);
 app.use("/:id", trackClick, redirectFromShortUrl);
+app.use('/api', trackData)
 
 app.use(globalErrorHandler);
 
@@ -50,3 +52,8 @@ app.listen(port, () => {
   connectToDB();
   console.log(`server is running port http://localhost:${port}`);
 });
+
+
+
+
+

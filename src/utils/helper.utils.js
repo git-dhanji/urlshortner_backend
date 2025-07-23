@@ -5,10 +5,10 @@ export const generateNanoId = (length) => {
   return nanoid(length || 6);
 };
 
-export const signToken = async (payload) => {
+export const signToken = async (payload,expireIn) => {
   try {
     const token = jwt.sign(payload, process.env.JWT_SECRET, {
-      expiresIn: "1h",
+      expiresIn: expireIn || "1h",
     });
 
     return token;

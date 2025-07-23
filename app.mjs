@@ -11,6 +11,7 @@ import cookieParser from "cookie-parser";
 import trackClick from "./src/controllers/analytics.controllers.js";
 import analyticsRouter from "./src/routes/analytics.routes.js";
 import contactRouter from "./src/routes/contact.routes.js";
+import socialRouter from './src/features/social/social.routes.js'
 
 import trackData from './src/routes/trackData.routes.js'
 
@@ -39,6 +40,7 @@ app.get("/", (req, res) => {
   })
 });
 
+app.use('/api/auth/google', socialRouter);
 app.use("/api/create", shorturlRouter);
 app.use("/api/urls", userUrls);
 
@@ -51,6 +53,9 @@ app.use("/api/contact", contactRouter);
 // app.use("/:id",  redirectFromShortUrl);
 app.use("/:id", trackClick, redirectFromShortUrl);
 app.use('/api', trackData)
+
+
+//Social login 
 
 app.use(globalErrorHandler);
 

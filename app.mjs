@@ -13,6 +13,7 @@ import analyticsRouter from "./src/routes/analytics.routes.js";
 import contactRouter from "./src/routes/contact.routes.js";
 
 import trackData from './src/routes/trackData.routes.js'
+
 configDotenv();
 const port = process.env.PORT || 4000;
 
@@ -32,12 +33,17 @@ app.use(cookieParser());
 //Get
 
 app.get("/", (req, res) => {
-  res.send("<h1>Welcome to the URL Shortener API</h1>");
+
+  res.json({
+    message: "Welcome to URL Shortner API",
+  })
 });
 
 app.use("/api/create", shorturlRouter);
 app.use("/api/urls", userUrls);
+
 app.use("/api/auth", authRouter);
+
 app.use("/api", analyticsRouter);
 app.use("/api/contact", contactRouter);
 

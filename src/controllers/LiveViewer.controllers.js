@@ -9,7 +9,6 @@ const liverTrackData = async (req,res,next) => {
         });
     }
     try {
-        console.log(data)
         res.status(200).json({
             message: "data received",
         });

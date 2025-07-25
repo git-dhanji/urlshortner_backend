@@ -3,9 +3,9 @@ import bcrypt from "bcrypt";
 import crypto from 'crypto'
 const userSchema = new mongoose.Schema(
   {
-    username: { type: String, required: true },
+    displayName: { type: String },    
     email: { type: String, required: true, unique: true },
-    password: { type: String, required: true, select: false },
+    password: { type: String, select: false },
     avatar: {
       type: String,
       default: function () {
@@ -21,13 +21,23 @@ const userSchema = new mongoose.Schema(
         return "https://www.gravatar.com/avatar/?d=mp";
       },
     },
+    googleId: { type: String },
+    githubId: { type: String },
+    facebookId: { type: String },
+
+    loginType: {
+      type: String,
+      enum: ["local", "google", "github", "facebook"],
+      default: "local",
+    },
   },
   { timestamps: true }
 );
 
 userSchema.pre("save", async function (next) {
+  if (this.loginType !== "local") return next();
   if (!this.isModified("password")) next();
-  this.password = await bcrypt.hash(this.password, 10);
+  this.password = bcrypt.hash(this.password, 10);
   next();
 });
 

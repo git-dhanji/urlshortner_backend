@@ -1,5 +1,9 @@
-import express from "express";
+
 import { configDotenv } from "dotenv";
+configDotenv(); // Load environment variables FIRST before any other imports
+
+import express from "express";
+import session from "express-session";
 import connectToDB from "./src/config/mongo.config.js";
 import shorturlRouter from "./src/routes/shorturl.routes.js";
 import authRouter from "./src/routes/auth.routes.js";
@@ -11,14 +15,40 @@ import cookieParser from "cookie-parser";
 import trackClick from "./src/controllers/analytics.controllers.js";
 import analyticsRouter from "./src/routes/analytics.routes.js";
 import contactRouter from "./src/routes/contact.routes.js";
-import socialRouter from './src/features/social/social.routes.js'
-
+import socialRoutes from './src/features/social/socialRoutes.js'
+import passport from "passport";
 import trackData from './src/routes/trackData.routes.js'
 
-configDotenv();
 const port = process.env.PORT || 4000;
 
 const app = express();
+
+// Setup session first
+app.use(
+  session({
+    secret: process.env.GOOGLE_SESSION_SECRET,
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+      secure: false, // set true if using https
+      httpOnly: true,
+      maxAge: 24 * 60 * 60 * 1000, // 1 day
+    },
+  })
+);
+
+// Initialize passport
+app.use(passport.initialize());
+app.use(passport.session());
+
+(async () => {
+  try {
+    await import('./src/config/password.js');
+  } catch (error) {
+    console.log(error)
+  }
+})();
+
 
 app.use(
   cors({
@@ -40,7 +70,8 @@ app.get("/", (req, res) => {
   })
 });
 
-app.use('/api/auth/google', socialRouter);
+
+app.use('/auth/', socialRoutes)
 app.use("/api/create", shorturlRouter);
 app.use("/api/urls", userUrls);
 

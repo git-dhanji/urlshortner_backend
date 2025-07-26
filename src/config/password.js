@@ -9,7 +9,7 @@ try {
             {
                 clientID: process.env.GOOGLE_CLIENT_ID,
                 clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-                callbackURL: "http://localhost:4000/auth/google/callback",
+                callbackURL: `${process.env.APP_URI}/auth/google/callback`,
             },
             async function (accessToken, refreshToken, profile, done) {
                 try {

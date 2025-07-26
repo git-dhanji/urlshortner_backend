@@ -21,3 +21,5 @@ export const getCustomShortUrl = async (slug) => {
 export const getUserUrl = async (id) => {
   return shortUrlSchema.find({ user: id });
 };
+
+

@@ -71,8 +71,8 @@ app.get("/", (req, res) => {
 });
 
 
-app.use('/auth/', socialRoutes)
-app.use("/api/create", shorturlRouter);
+app.use('/auth', socialRoutes)
+app.use("/api/create", shorturlRouter)
 app.use("/api/urls", userUrls);
 
 app.use("/api/auth", authRouter);

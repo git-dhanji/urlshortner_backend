@@ -4,10 +4,11 @@ import {
   createShortUrlWithUserService,
   getUrlByShortIdService,
 } from "../services/shorturl.services.js";
-import { AppError } from "../utils/errorHandler.utils.js";
+import { AppError, WrapAsync } from "../utils/errorHandler.utils.js";
 import { makeRedirectableUrl } from "../utils/helper.utils.js";
+import shortUrl from '../models/shorturl.models.js'
 
-export const createShortUrl = async (req, res) => {
+export const createShortUrl = WrapAsync(async (req, res) => {
   let shortUrl;
 
   const data = req.body;
@@ -32,7 +33,7 @@ export const createShortUrl = async (req, res) => {
     message: "short url created successfully!",
     fullUrl: fullUrl,
   });
-};
+});
 
 
 
@@ -77,3 +78,18 @@ export const redirectFromShortUrl = async (req, res, next) => {
     next(err); // let your global error handler deal with it
   }
 };
+
+
+
+export const deleteUrl = WrapAsync(async (req, res, next) => {
+
+  const { id } = req.params;
+  const found = await shortUrl.findOneAndDelete({ short_url: id })
+  console.log('found', found)
+  res.json({
+    message: "Url deleted successfully",
+    found
+  })
+ 
+
+});

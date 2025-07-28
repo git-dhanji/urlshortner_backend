@@ -13,7 +13,7 @@ const apiCreateUrl = WrapAsync(async (req, res, next) => {
     const fullUrl = `${process.env.APP_URI}/${shortUrl}`;
     res.status(201).json({
         message: "short url created successfully!",
-        data: { originalUrl: url, shortLink: fullUrl },
+        data: { originalUrl: url, shortLink: fullUrl, shortId: shortUrl },
     });
 })
 

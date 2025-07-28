@@ -28,7 +28,7 @@ export const createShortUrl = WrapAsync(async (req, res) => {
     shortUrl = await createShortUrlService(data.url);
   }
 
-  const fullUrl = `${process.env.APP_URI}${shortUrl}`;
+  const fullUrl = `${process.env.APP_URI}/${shortUrl}`;
   res.status(201).json({
     message: "short url created successfully!",
     fullUrl: fullUrl,
@@ -53,10 +53,10 @@ export const createCustomShortUrl = async (req, res) => {
   } else {
     // For custom URLs without user, we need a different approach
     // Since createShortUrlService doesn't accept slug, we'll use the user service with null userId
-    shortUrl = await createShortUrlWithUserService(url, null, slug);
+    shortUrl = await createShortUrlService(url, null, slug);
   }
 
-  const fullUrl = `${process.env.APP_URI}${shortUrl}`;
+  const fullUrl = `${process.env.APP_URI}/${shortUrl}`;
   res.status(201).json({
     message: "custom short url created successfully",
     shortUrl: fullUrl,
@@ -90,6 +90,6 @@ export const deleteUrl = WrapAsync(async (req, res, next) => {
     message: "Url deleted successfully",
     found
   })
- 
+
 
 });

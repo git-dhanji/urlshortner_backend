@@ -80,7 +80,7 @@ export const getAnalyticsDataByShortId = WrapAsync(async (req, res) => {
         // 3. Build response
         const response = {
             url: {
-                shortUrl: `${process.env.APP_URI}${shortId}`,
+                shortUrl: `${process.env.APP_URI}/${shortId}`,
                 shortId: shortId,
                 originalUrl: urlData.original_url,
                 totalClicks: result.totalClicks[0]?.count || 0,

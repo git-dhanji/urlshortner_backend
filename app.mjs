@@ -18,6 +18,7 @@ import contactRouter from "./src/routes/contact.routes.js";
 import socialRoutes from './src/features/social/socialRoutes.js'
 import passport from "passport";
 import trackData from './src/routes/trackData.routes.js'
+import apiCreateUrlRoutes from '../backend/src/features/api/api.routes.js'
 
 const port = process.env.PORT || 4000;
 
@@ -64,29 +65,30 @@ app.use(cookieParser());
 //Get
 
 app.get("/", (req, res) => {
-
   res.json({
     message: "Welcome to URL Shortner API",
   })
 });
 
-
+//Social login 
 app.use('/auth', socialRoutes)
+
+//create url
 app.use("/api/create", shorturlRouter)
 app.use("/api/urls", userUrls);
-
 app.use("/api/auth", authRouter);
-
 app.use("/api", analyticsRouter);
 app.use("/api/contact", contactRouter);
 
-//Get short URL
+//developer api 
+app.use('/dev/c-links', apiCreateUrlRoutes)
+
 // app.use("/:id",  redirectFromShortUrl);
 app.use("/:id", trackClick, redirectFromShortUrl);
 app.use('/api', trackData)
 
 
-//Social login 
+
 
 app.use(globalErrorHandler);
 

@@ -26,6 +26,7 @@
     "nanoid": "^5.1.5",
     "passport": "^0.7.0",
     "passport-google-oauth20": "^2.0.0",
+    "razorpay": "^2.9.6",
     "serverless-http": "^3.2.0",
     "useragent": "^2.3.0"
   }

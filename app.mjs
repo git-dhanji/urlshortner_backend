@@ -1,7 +1,6 @@
 
 import { configDotenv } from "dotenv";
 configDotenv(); // Load environment variables FIRST before any other imports
-
 import express from "express";
 import session from "express-session";
 import connectToDB from "./src/config/mongo.config.js";
@@ -18,12 +17,12 @@ import contactRouter from "./src/routes/contact.routes.js";
 import socialRoutes from './src/features/social/socialRoutes.js'
 import passport from "passport";
 import trackData from './src/routes/trackData.routes.js'
-import apiCreateUrlRoutes from '../backend/src/features/api/api.routes.js'
-
+import apiCreateUrlRoutes from './src/features/api/api.routes.js'
+import paymentRoutes from './src/features/payment/payment.routes.js'
 const port = process.env.PORT || 4000;
 
-const app = express();
 
+const app = express();
 // Setup session first
 app.use(
   session({
@@ -53,7 +52,7 @@ app.use(passport.session());
 
 app.use(
   cors({
-    origin: "http://localhost:5173", // Adjust this to your frontend URL
+    origin: "http://localhost:5173" || process.env.CLIENT_URI, // Adjust this to your frontend URL
     credentials: true, // Allow cookies to be sent with requests
   })
 );
@@ -70,8 +69,18 @@ app.get("/", (req, res) => {
   })
 });
 
+
+
+//developer api 
+app.use('/api/v1', apiCreateUrlRoutes)
+
 //Social login 
 app.use('/auth', socialRoutes)
+
+
+
+//Payment route 
+app.use('/api/payment', paymentRoutes)
 
 //create url
 app.use("/api/create", shorturlRouter)
@@ -80,8 +89,6 @@ app.use("/api/auth", authRouter);
 app.use("/api", analyticsRouter);
 app.use("/api/contact", contactRouter);
 
-//developer api 
-app.use('/dev/c-links', apiCreateUrlRoutes)
 
 // app.use("/:id",  redirectFromShortUrl);
 app.use("/:id", trackClick, redirectFromShortUrl);

@@ -6,11 +6,14 @@ import apiCreateUrl from './api.controllers.js';
 const router = Router();
 router
     .get('/', async (req, res) => {
+        res.json('hello')
+    })
+    .post('/links', apiCreateUrl)
+    .delete('/links/:shortId', async (req, res) => {
         res.json({
-            message: `hello create your short links : ${process.env.APP_URI}/dev/c-links (method : post ) and body must have a { url }`
+            message: 'working on that',
         })
     })
-    .post('/', apiCreateUrl)
 
 
 

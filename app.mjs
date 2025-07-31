@@ -17,10 +17,10 @@ import contactRouter from "./src/routes/contact.routes.js";
 import socialRoutes from './src/features/social/socialRoutes.js'
 import passport from "passport";
 import trackData from './src/routes/trackData.routes.js'
-import apiCreateUrlRoutes from '../backend/src/features/api/api.routes.js'
-
+import apiCreateUrlRoutes from './src/features/api/api.routes.js'
+import paymentRoutes from './src/features/payment/payment.routes.js'
+import insertPrice from "./src/features/payment/pricing.js";
 const port = process.env.PORT || 4000;
-
 const app = express();
 // Setup session first
 app.use(
@@ -51,13 +51,10 @@ app.use(passport.session());
 
 app.use(
   cors({
-    origin: "http://localhost:5173", // Adjust this to your frontend URL
+    origin: "http://localhost:5173" || process.env.CLIENT_URI, // Adjust this to your frontend URL
     credentials: true, // Allow cookies to be sent with requests
   })
 );
-
-//git pull test: for payment 
-
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -67,7 +64,7 @@ app.use(cookieParser());
 
 app.get("/", async (req, res) => {
   res.json({
-    message: "Welcome to URL Shortner API :-",
+    message: "Welcome to URL Shortner API",
   })
 });
 

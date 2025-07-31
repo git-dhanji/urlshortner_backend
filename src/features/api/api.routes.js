@@ -14,6 +14,15 @@ router
             message: 'working on that',
         })
     })
+<<<<<<< HEAD
+=======
+    .post('/links', apiCreateUrl)
+    .delete('/links/:shortId', async (req, res) => {
+        res.json({
+            message: 'working on that',
+        })
+    })
+>>>>>>> main
 
 
 

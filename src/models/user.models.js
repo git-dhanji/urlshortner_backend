@@ -3,7 +3,7 @@ import bcrypt from "bcrypt";
 import crypto from 'crypto'
 const userSchema = new mongoose.Schema(
   {
-    displayName: { type: String },    
+    displayName: { type: String },
     email: { type: String, required: true, unique: true },
     password: { type: String, select: false },
     avatar: {
@@ -30,6 +30,15 @@ const userSchema = new mongoose.Schema(
       enum: ["local", "google", "github", "facebook"],
       default: "local",
     },
+    isSubscribe: { type: Boolean, default: false },
+    subscriptionStart: { type: Date },
+    plan: {
+      type: String,
+      enum: ["free", "premium", 'enterprise'],
+    },
+    subscriptionEnd: {
+      type: Date
+    }
   },
   { timestamps: true }
 );

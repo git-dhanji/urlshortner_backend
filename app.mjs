@@ -17,10 +17,9 @@ import contactRouter from "./src/routes/contact.routes.js";
 import socialRoutes from './src/features/social/socialRoutes.js'
 import passport from "passport";
 import trackData from './src/routes/trackData.routes.js'
-import apiCreateUrlRoutes from './src/features/api/api.routes.js'
-import paymentRoutes from './src/features/payment/payment.routes.js'
-const port = process.env.PORT || 4000;
+import apiCreateUrlRoutes from '../backend/src/features/api/api.routes.js'
 
+const port = process.env.PORT || 4000;
 
 const app = express();
 // Setup session first
@@ -52,7 +51,7 @@ app.use(passport.session());
 
 app.use(
   cors({
-    origin: "http://localhost:5173" || process.env.CLIENT_URI, // Adjust this to your frontend URL
+    origin: "http://localhost:5173", // Adjust this to your frontend URL
     credentials: true, // Allow cookies to be sent with requests
   })
 );
@@ -63,7 +62,7 @@ app.use(cookieParser());
 
 //Get
 
-app.get("/", (req, res) => {
+app.get("/", async (req, res) => {
   res.json({
     message: "Welcome to URL Shortner API",
   })
@@ -91,8 +90,8 @@ app.use("/api/contact", contactRouter);
 
 
 // app.use("/:id",  redirectFromShortUrl);
-app.use("/:id", trackClick, redirectFromShortUrl);
 app.use('/api', trackData)
+app.use("/:id", trackClick, redirectFromShortUrl);
 
 
 
@@ -101,6 +100,8 @@ app.use(globalErrorHandler);
 
 app.listen(port, () => {
   connectToDB();
+  insertPrice();
+  // pricingController('hello');
   console.log(`server is running port http://localhost:${port}`);
 });
 

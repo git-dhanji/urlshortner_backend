@@ -8,8 +8,11 @@ if (!process.env.RAZORPAY_KEY_ID || !process.env.RAZORPAY_KEY_SECRET) {
     throw new AppError("Razorpay env variables missing");
 }
 
+<<<<<<< HEAD
+=======
 
 
+>>>>>>> main
 const razorpay = new Razorpay({
     key_id: process.env.RAZORPAY_KEY_ID,
     key_secret: process.env.RAZORPAY_KEY_SECRET

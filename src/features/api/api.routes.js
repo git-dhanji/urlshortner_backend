@@ -5,8 +5,8 @@ import apiCreateUrl from './api.controllers.js';
 
 const router = Router();
 router
-    .get('/', async (req, res) => {
-        res.json('hello')
+    .get('/links', async (req, res) => {
+        res.json('hello use post method lol ! ')
     })
     .post('/links', apiCreateUrl)
     .delete('/links/:shortId', async (req, res) => {
@@ -14,6 +14,15 @@ router
             message: 'working on that',
         })
     })
+<<<<<<< HEAD
+=======
+    .post('/links', apiCreateUrl)
+    .delete('/links/:shortId', async (req, res) => {
+        res.json({
+            message: 'working on that',
+        })
+    })
+>>>>>>> main
 
 
 

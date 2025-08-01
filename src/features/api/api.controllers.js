@@ -7,6 +7,7 @@ const apiCreateUrl = WrapAsync(async (req, res, next) => {
     if (!url) {
         throw new AppError('url is empty', 400)
     }
+
     const shortUrl = await createShortUrlService(url)
     if (!shortUrl) throw new Error('short url not created')
 
@@ -16,6 +17,7 @@ const apiCreateUrl = WrapAsync(async (req, res, next) => {
         data: { originalUrl: url, shortLink: fullUrl, shortId: shortUrl },
     });
 })
+
 
 
 export default apiCreateUrl

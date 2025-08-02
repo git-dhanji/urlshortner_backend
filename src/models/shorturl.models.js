@@ -11,6 +11,7 @@ const shortUrlSchema = new mongoose.Schema({
     index: true,
     unique: true,
   },
+
   redirect_url: {
     type: String,
     required: true,
@@ -20,16 +21,20 @@ const shortUrlSchema = new mongoose.Schema({
     type: Number,
     default: 0,
   },
+  qrcode: {
+    type: String,
+    required: false
+  },
 
   user: {
-  type: mongoose.Schema.Types.ObjectId,
-  ref: "User",
-  required: false,
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+    required: false,
+  }
+
+}, {
+  timestamps: true
 },
-  
-},{
-    timestamps: true
-  },
 );
 
 const ShortUrl = mongoose.model("ShortUrl", shortUrlSchema);

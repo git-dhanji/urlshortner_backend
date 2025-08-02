@@ -5,18 +5,18 @@ import path from 'path'
 import { fileURLToPath } from 'url'
 import fs from 'fs';
 
-
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const logo = path.resolve(__dirname, '../assets/logo.png')
 
-export const generateQrCode = async ({ url, type = 'png', width = '200', errorCorrectionLevel = 'H', color = '#0000FF', bgColor = '#FFFF00', margin = '1' }) => {
+export const generateQrCode = async ({ url, type = 'png', width = '200', errorCorrectionLevel = 'H', Fcolor, bgColor, margin = '2' }) => {
     if (!url) throw new AppError('while generating qr code url is must', 403);
     const qrCode = qrcode.toBuffer(url, {
         type: type,
         width: width,
+
         color: {
-            dark: color,
+            dark: Fcolor,
             light: bgColor
         },
         margin: margin,
@@ -27,10 +27,10 @@ export const generateQrCode = async ({ url, type = 'png', width = '200', errorCo
 
 
 // Helper function to generate QR code with logo and colors
-export const generateCustomQrCode = async (url, logoPath, color = '#0000FF', bgColor = '#FFFF00') => {
+export const generateCustomQrCode = async ({ url, logoPath = "", color = '#000000', bgColor = '#FFFFFF' }) => {
     try {
         // Generate basic QR code as a buffer
-        const qrCodeBuffer = await generateQrCode({ url: url, color, bgColor });
+        const qrCodeBuffer = await generateQrCode({ url: url, Fcolor: color, bgColor });
 
         // Check if logo file exists
         if (!fs.existsSync(logoPath)) {
@@ -57,6 +57,7 @@ export const generateCustomQrCode = async (url, logoPath, color = '#0000FF', bgC
         const finalQrCodeBuffer = await qrCodeImage
             .composite([{ input: resizedLogoBuffer, gravity: 'center' }])
             .toBuffer();
+
 
         return finalQrCodeBuffer;
 

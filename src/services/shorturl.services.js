@@ -1,6 +1,8 @@
 import { generateNanoId } from "../utils/helper.utils.js";
 import { getCustomShortUrl, saveShortUrl } from "../dao/shorturl.dao.js";
 import shortUrlSchema from "../models/shorturl.models.js";
+import genAndSaveQr from "../features/genqrcode/geneAndSaveQr.js";
+
 
 export const createShortUrlService = async (url) => {
   const shortId = generateNanoId(6);
@@ -9,29 +11,21 @@ export const createShortUrlService = async (url) => {
 };
 
 
-
-
-
 export const createShortUrlWithUserService = async (
   url,
   userId,
   slug = null
 ) => {
   const shortId = slug || generateNanoId(6);
-
   const existingUrl = await getCustomShortUrl(shortId);
   if (existingUrl) {
     throw new Error("Short URL already exists");
   }
-
-  await saveShortUrl(shortId, url, userId);
+  const qrS3Url = await genAndSaveQr(`${process.env.APP_URI}/${shortId}`, shortId);
+ 
+  await saveShortUrl(shortId, url, userId, qrS3Url);
   return shortId;
 };
-
-
-
-
-
 
 
 

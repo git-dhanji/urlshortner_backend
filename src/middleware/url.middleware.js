@@ -17,6 +17,7 @@ export const urlMiddleware = async (req, res, next) => {
     const user = await findUserById(decoded.id);
     if (!user) throw new Error("user not find");
     req.user = user;
+    console.log(req.user,'from url middleware')
     next();
   } catch (error) {
     console.log('create your link as guest');

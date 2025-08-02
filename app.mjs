@@ -1,7 +1,7 @@
 
 import { configDotenv } from "dotenv";
 configDotenv(); // Load environment variables FIRST before any other imports
-import sharp from "sharp";
+
 import express from "express";
 import session from "express-session";
 import connectToDB from "./src/config/mongo.config.js";
@@ -21,7 +21,7 @@ import trackData from './src/routes/trackData.routes.js'
 import apiCreateUrlRoutes from './src/features/api/api.routes.js'
 import paymentRoutes from './src/features/payment/payment.routes.js'
 import insertPrice from "./src/features/payment/pricing.js";
-import { generateCustomQrCode } from './src/utils/qrCodeGenerator.js'
+import TestRoute from './src/test/test.routes.js'
 const port = process.env.PORT || 4000;
 const app = express();
 // Setup session first
@@ -66,24 +66,12 @@ app.use(cookieParser());
 
 app.get("/", async (req, res) => {
   res.json({
-    message: "Welcome to URL Shortner API",
+
+    message: "Welcome to URL Shortner API"
   })
 });
 
-
-
-//GenerateQr code 
-app.post('/api/v1/genQr', async (req, res) => {
-  const { link } = req.body;
-  const qrCodeImage = await generateCustomQrCode(link)
-  const pngBuffer = await sharp(qrCodeImage).png().toBuffer(); // ensure it's PNG
-  res.send(pngBuffer);
-  res.end(pngBuffer);
-
-  // res.set('Content-Type', 'image/png').send(qr)
-})
-
-
+app.use('/testapi', TestRoute)
 
 
 //developer api 
@@ -92,11 +80,8 @@ app.use('/api/v1', apiCreateUrlRoutes)
 //Social login 
 app.use('/auth', socialRoutes)
 
-
-
 //Payment route 
 app.use('/api/payment', paymentRoutes)
-
 //create url
 app.use("/api/create", shorturlRouter)
 app.use("/api/urls", userUrls);

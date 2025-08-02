@@ -19,11 +19,14 @@ export const createShortUrl = WrapAsync(async (req, res) => {
   }
 
   if (user) {
+
     shortUrl = await createShortUrlWithUserService(
       data.url,
       user._id,
       data.slug
     );
+
+
   } else {
     shortUrl = await createShortUrlService(data.url);
   }

@@ -4,6 +4,6 @@ import { getAnalyticsDataByShortId } from "../controllers/analyticsDatasenderCon
 
 const route = Router();
 
-route.get("/analytics/:shortId", getAnalyticsDataByShortId);
+route.get("/:shortId", getAnalyticsDataByShortId);
 
 export default route;

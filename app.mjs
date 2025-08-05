@@ -1,4 +1,3 @@
-
 import { configDotenv } from "dotenv";
 configDotenv(); // Load environment variables FIRST before any other imports
 
@@ -15,13 +14,13 @@ import cookieParser from "cookie-parser";
 import trackClick from "./src/controllers/analytics.controllers.js";
 import analyticsRouter from "./src/routes/analytics.routes.js";
 import contactRouter from "./src/routes/contact.routes.js";
-import socialRoutes from './src/features/social/socialRoutes.js'
+import socialRoutes from "./src/features/social/socialRoutes.js";
 import passport from "passport";
-import trackData from './src/routes/trackData.routes.js'
-import apiCreateUrlRoutes from './src/features/api/api.routes.js'
-import paymentRoutes from './src/features/payment/payment.routes.js'
+import trackData from "./src/routes/trackData.routes.js";
+import apiCreateUrlRoutes from "./src/features/api/api.routes.js";
+import paymentRoutes from "./src/features/payment/payment.routes.js";
 import insertPrice from "./src/features/payment/pricing.js";
-import TestRoute from './src/test/test.routes.js'
+import TestRoute from "./src/test/test.routes.js";
 const port = process.env.PORT || 4000;
 const app = express();
 // Setup session first
@@ -44,16 +43,15 @@ app.use(passport.session());
 
 (async () => {
   try {
-    await import('./src/config/password.js');
+    await import("./src/config/password.js");
   } catch (error) {
-    console.log(error)
+    console.log(error);
   }
 })();
 
-
 app.use(
   cors({
-    origin: "http://localhost:5173" || process.env.CLIENT_URI, // Adjust this to your frontend URL
+    origin: process.env.CLIENT_URI || "http://localhost:5173", // Adjust this to your frontend URL
     credentials: true, // Allow cookies to be sent with requests
   })
 );
@@ -63,39 +61,38 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
 //Get
-
 app.get("/", async (req, res) => {
   res.json({
-
-    message: "Welcome to URL Shortner API"
-  })
+    message: "Welcome to URL Shortner API",
+  });
 });
 
-app.use('/testapi', TestRoute)
-
-
-//developer api 
-app.use('/api/v1', apiCreateUrlRoutes)
-
-//Social login 
-app.use('/auth', socialRoutes)
-
-//Payment route 
-app.use('/api/payment', paymentRoutes)
-//create url
-app.use("/api/create", shorturlRouter)
-app.use("/api/urls", userUrls);
+//Core Routes
 app.use("/api/auth", authRouter);
-app.use("/api", analyticsRouter);
-app.use("/api/contact", contactRouter);
+app.use("/auth", socialRoutes);
 
+// URL Routes
+app.use("/api/create", shorturlRouter);
+app.use("/api/urls", userUrls);
 
-// app.use("/:id",  redirectFromShortUrl);
-app.use('/api', trackData)
+//Redirect Url
 app.use("/:id", trackClick, redirectFromShortUrl);
 
+// Analytics & Tracking
+app.use("/api/analytics", analyticsRouter);
+app.use("/api", trackData);
 
+//Payment route
+app.use("/api/payment", paymentRoutes);
 
+// Contact
+app.use("/api/contact", contactRouter);
+
+//developer api
+app.use("/api/v1", apiCreateUrlRoutes);
+
+//This is only for testing all api replace and check
+app.use("/testapi", TestRoute);
 
 app.use(globalErrorHandler);
 
@@ -105,8 +102,3 @@ app.listen(port, () => {
   // pricingController('hello');
   console.log(`server is running port http://localhost:${port}`);
 });
-
-
-
-
-

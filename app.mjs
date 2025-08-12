@@ -22,7 +22,7 @@ import paymentRoutes from "./src/features/payment/payment.routes.js";
 import insertPrice from "./src/features/payment/pricing.js";
 import TestRoute from "./src/test/test.routes.js";
 const port = process.env.PORT || 4000;
-const app = express();
+export const app = express();
 // Setup session first
 app.use(
   session({
@@ -96,9 +96,5 @@ app.use("/testapi", TestRoute);
 
 app.use(globalErrorHandler);
 
-// app.listen(port, () => {
-//   connectToDB();
-//   insertPrice();
-//   // pricingController('hello');
-//   console.log(`server is running port http://localhost:${port}`);
-// });
+
+export { connectToDB , insertPrice }

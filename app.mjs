@@ -75,8 +75,6 @@ app.use("/auth", socialRoutes);
 app.use("/api/create", shorturlRouter);
 app.use("/api/urls", userUrls);
 
-//Redirect Url
-app.use("/:id", trackClick, redirectFromShortUrl);
 
 // Analytics & Tracking
 app.use("/api/analytics", analyticsRouter);
@@ -94,7 +92,11 @@ app.use("/api/v1", apiCreateUrlRoutes);
 //This is only for testing all api replace and check
 app.use("/testapi", TestRoute);
 
+//Redirect Url
+app.use("/:id", trackClick, redirectFromShortUrl);
+
+
 app.use(globalErrorHandler);
 
 
-export { connectToDB , insertPrice }
+export { connectToDB, insertPrice }

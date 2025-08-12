@@ -21,8 +21,8 @@ import apiCreateUrlRoutes from "./src/features/api/api.routes.js";
 import paymentRoutes from "./src/features/payment/payment.routes.js";
 import insertPrice from "./src/features/payment/pricing.js";
 import TestRoute from "./src/test/test.routes.js";
-const port = process.env.PORT || 4000;
-export const app = express();
+
+const app = express();
 // Setup session first
 app.use(
   session({
@@ -99,4 +99,4 @@ app.use("/:id", trackClick, redirectFromShortUrl);
 app.use(globalErrorHandler);
 
 
-export { connectToDB, insertPrice }
+export { connectToDB, insertPrice, app }

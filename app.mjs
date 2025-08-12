@@ -96,9 +96,9 @@ app.use("/testapi", TestRoute);
 
 app.use(globalErrorHandler);
 
-app.listen(port, () => {
-  connectToDB();
-  insertPrice();
-  // pricingController('hello');
-  console.log(`server is running port http://localhost:${port}`);
-});
+// app.listen(port, () => {
+//   connectToDB();
+//   insertPrice();
+//   // pricingController('hello');
+//   console.log(`server is running port http://localhost:${port}`);
+// });

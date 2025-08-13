@@ -29,18 +29,21 @@ export const requestLogger = (req, res, next) => {
         const query = req.query || {};
         const body = req.body || {};
 
-        logger.info("Incoming Request", {
+        logger.info({
             timestamp: new Date().toISOString(),
-            method,
-            url,
-            headers: {
-                origin: headers.origin,
-                host: headers.host,
-                "user-agent": headers["user-agent"],
-            },
-            query,
-            body,
-            cookies
+            event: "incoming_request",
+            request: {
+                method: method || "UNKNOWN",
+                url: url || "UNKNOWN",
+                headers: {
+                    origin: headers.origin || null,
+                    host: headers.host || null,
+                    userAgent: headers["user-agent"] || null
+                },
+                query: query || {},
+                body: body || {},
+                cookies: cookies || {}
+            }
         });
 
         next();

@@ -21,6 +21,7 @@ import apiCreateUrlRoutes from "./src/features/api/api.routes.js";
 import paymentRoutes from "./src/features/payment/payment.routes.js";
 import insertPrice from "./src/features/payment/pricing.js";
 import TestRoute from "./src/test/test.routes.js";
+import { requestLogger } from "./src/middleware/logger.middleware.js";
 const port = process.env.PORT || 4000;
 const app = express();
 await connectToDB();
@@ -60,6 +61,8 @@ app.use(
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
+app.use(requestLogger)
+
 
 //Get
 app.get("/", async (req, res) => {

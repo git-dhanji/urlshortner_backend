@@ -1,6 +1,13 @@
 import winston from 'winston'
 
 
+const maskCookies = (cookies) => {
+    if (!cookies) return {};
+    return Object.fromEntries(
+        Object.entries(cookies).map(([k, v]) => [k, "*".repeat(v.length)])
+    );
+};
+
 // Winston Logger configuration
 const logger = winston.createLogger({
     level: "info",

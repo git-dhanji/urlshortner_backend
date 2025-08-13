@@ -10,7 +10,6 @@ import shortUrl from '../models/shorturl.models.js'
 
 export const createShortUrl = WrapAsync(async (req, res) => {
   let shortUrl;
-
   const data = req.body;
   const user = req.user;
 

@@ -1,10 +1,15 @@
-import { WrapAsync } from "../utils/errorHandler.utils.js";
+import { AppError, WrapAsync } from "../utils/errorHandler.utils.js";
 import { createUser } from "../services/auth.service.js";
 import { cookieOptions } from "../config/cookie.config.js";
 import { login_user } from "../services/auth.service.js";
 
 export const registerUser = WrapAsync(async (req, res) => {
   const { username, email, password } = req.body;
+
+  if (!(email && password)) {
+    throw new AppError('email or password not empty', 403)
+  }
+
   const { token, userData } = await createUser(username, email, password);
   res.cookie("accessToken", token, cookieOptions);
   res.status(201).json({

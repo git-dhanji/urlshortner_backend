@@ -1,6 +1,6 @@
 import { PutObjectCommand } from "@aws-sdk/client-s3"
 
-import s3 from "../config/awss3.js";
+import s3 from "../config/awsS3.js";
 
 
 const uploadToS3 = async (buffer, filename) => {

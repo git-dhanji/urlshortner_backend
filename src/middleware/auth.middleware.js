@@ -4,7 +4,7 @@ import logger from "./logger.middleware.js";
 
 export const authMiddleware = async (req, res, next) => {
   const token = req.cookies.accessToken;
-  console.log('token', token, req)
+  logger.info("token", token)
   if (!token) {
     return res.status(401).json({ message: "Unauthorized access" });
   }

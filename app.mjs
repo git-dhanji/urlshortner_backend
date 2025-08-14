@@ -21,12 +21,26 @@ import apiCreateUrlRoutes from "./src/features/api/api.routes.js";
 import paymentRoutes from "./src/features/payment/payment.routes.js";
 import insertPrice from "./src/features/payment/pricing.js";
 import TestRoute from "./src/test/test.routes.js";
-import logger, { requestLogger } from "./src/middleware/logger.middleware.js";
 import { cookieOptions } from "./src/config/cookie.config.js";
+(async () => {
+  try {
+    await import("./src/config/password.js");
+  } catch (error) {
+    console.log(error);
+  }
+})();
 const port = process.env.PORT || 4000;
 const app = express();
 await connectToDB();
-// Setup session first
+app.use(
+  cors({
+    origin: process.env.CLIENT_URI || "http://localhost:5173", // Adjust this to your frontend URL
+    credentials: true, // Allow cookies to be sent with requests
+  })
+);
+
+
+app.use(cookieParser());
 app.use(
   session({
     secret: process.env.GOOGLE_SESSION_SECRET,
@@ -35,30 +49,14 @@ app.use(
     cookie: cookieOptions
   })
 );
-
-
 // Initialize passport
 app.use(passport.initialize());
 app.use(passport.session());
 
-(async () => {
-  try {
-    await import("./src/config/password.js");
-  } catch (error) {
-    console.log(error);
-  }
-})();
-
-app.use(
-  cors({
-    origin: process.env.CLIENT_URI || "http://localhost:5173", // Adjust this to your frontend URL
-    credentials: true, // Allow cookies to be sent with requests
-  })
-);
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(cookieParser());
+
 
 // app.use(requestLogger)
 

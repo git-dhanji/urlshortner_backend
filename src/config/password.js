@@ -1,6 +1,7 @@
 import passport from "passport";
 import { Strategy as GoogleStrategy } from "passport-google-oauth20";
 import User from "../models/user.models.js";
+import { findUserById } from "../dao/user.dao.js";
 try {
 
     passport.use(
@@ -48,9 +49,15 @@ try {
     console.error('Full error:', error);
 }
 
-passport.serializeUser((user, done) => {
-    done(null, user);
+passport.serializeUser(async (user, done) => {
+    done(null, user._id);
+
 });
-passport.deserializeUser((user, done) => {
+
+
+
+
+passport.deserializeUser(async (userId, done) => {
+    const user = await findUserById(userId);
     done(null, user);
 });

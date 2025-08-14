@@ -21,7 +21,8 @@ import apiCreateUrlRoutes from "./src/features/api/api.routes.js";
 import paymentRoutes from "./src/features/payment/payment.routes.js";
 import insertPrice from "./src/features/payment/pricing.js";
 import TestRoute from "./src/test/test.routes.js";
-import { requestLogger } from "./src/middleware/logger.middleware.js";
+import logger, { requestLogger } from "./src/middleware/logger.middleware.js";
+import { cookieOptions } from "./src/config/cookie.config.js";
 const port = process.env.PORT || 4000;
 const app = express();
 await connectToDB();
@@ -31,13 +32,10 @@ app.use(
     secret: process.env.GOOGLE_SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
-    cookie: {
-      secure: false, // set true if using https
-      httpOnly: true,
-      maxAge: 24 * 60 * 60 * 1000, // 1 day
-    },
+    cookie: cookieOptions
   })
 );
+logger.info(cookieOptions)
 
 // Initialize passport
 app.use(passport.initialize());

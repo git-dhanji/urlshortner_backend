@@ -1,12 +1,12 @@
 import { findUserById } from "../dao/user.dao.js";
 import { verifyToken } from "../utils/helper.utils.js";
-import logger from "./logger.middleware.js";
+
 
 export const authMiddleware = async (req, res, next) => {
   const token = req.cookies.accessToken;
-  logger.info("token", token)
+
   if (!token) {
-    return res.status(401).json({ message: "Unauthorized access" });
+    return res.status(401).json({ message: "Unauthorized access and !token" });
   }
 
   try {

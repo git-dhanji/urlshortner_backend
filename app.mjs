@@ -35,7 +35,7 @@ app.use(
     cookie: cookieOptions
   })
 );
-logger.info(cookieOptions)
+
 
 // Initialize passport
 app.use(passport.initialize());
@@ -59,7 +59,8 @@ app.use(
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
-app.use(requestLogger)
+
+// app.use(requestLogger)
 
 
 //Get

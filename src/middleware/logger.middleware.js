@@ -1,4 +1,5 @@
 import winston from 'winston'
+import { verifyToken } from '../utils/helper.utils.js';
 
 
 const maskCookies = (cookies) => {
@@ -57,15 +58,16 @@ export const requestLogger = (req, res, next) => {
 export const jwtLogger = (req, res, next) => {
     try {
         const token = req.cookies?.accessToken;
+
         if (!token) {
             logger.warn("No token found in cookies", { url: req.url });
             return res.status(401).json({ success: false, message: "Unauthorized" });
         }
 
-        const user = jwt.verify(token, process.env.JWT_SECRET);
+        const user = verifyToken(token);
         req.user = user;
 
-        logger.info("JWT Verified", { userId: user.id, email: user.email });
+        logger.info("JWT Verified", { userId: user._id, user });
         next();
     } catch (err) {
         logger.error("JWT verification failed", { error: err.message });

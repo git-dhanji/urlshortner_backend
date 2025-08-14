@@ -18,6 +18,8 @@ export const registerUser = WrapAsync(async (req, res) => {
   });
 });
 
+
+
 export const loginUser = WrapAsync(async (req, res) => {
   const { email, password } = req.body;
 
@@ -36,13 +38,8 @@ export const loginUser = WrapAsync(async (req, res) => {
 });
 
 export const logoutUser = (req, res) => {
-  res.clearCookie("accessToken", {
-    httpOnly: true,
-    secure: true, // same as you used during set
-    sameSite: "Lax", // same as you used during set
+  res.clearCookie("accessToken", cookieOptions);
+  req.session?.destroy(() => {
+    res.status(200).json({ message: "Logged out" });
   });
-
-  return res
-    .status(200)
-    .json({ user: null, message: "Logged out successfully" });
 };
